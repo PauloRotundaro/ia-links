@@ -1,0 +1,101 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: rgb(235, 244, 248);
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.btn {
+  color:#FFF;
+  font-weight: 500;
+  border-radius: 5px;
+  margin-left: 10px;
+  width: 100px;
+  background-color: rgb(73, 190, 73);
+}
+
+.column-30 {
+  width: 30%;
+  background-color: white;
+  border-radius: 5px;
+  border-color: #000;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  height: 100px;
+  align-items: center;
+  text-align: center;
+  vertical-align: center;
+  color: #000;
+  font-weight: 400;
+  display: flex;
+  padding: 10px;
+  overflow-wrap: anywhere;
+}
+
+.column-30:hover {
+  cursor: pointer;
+  box-shadow: rgb(171, 176, 184) 0px 0px 4px 2px inset, rgba(255, 255, 255, 0.5) 2px 2px 6px 3px inset;
+}
+
+.column-titles {
+  width: 100%;
+  justify-content: space-around;
+}
+
+.column-title {
+  text-align: center;
+  color: #000;
+  font-weight: 500;
+  font-size: 18px;
+  width: 30%;
+}
+
+.columns {
+  justify-content: space-around;
+}
+
+.copied {
+  background-color: rgb(73, 190, 73);
+  color: white;
+  font-weight: bold;
+  margin: 5px;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.input-title {
+  color: black;
+  font-weight: bold;
+  padding: 5px;
+}
+
+input {
+  color: #000;
+  border-radius: 5px;
+  border: 1px solid #000;
+  padding: 5px;
+}
+
+.wdt-100 {
+  width: 100% !important;
+  /* display: flex;
+  justify-content: space-between; */
+}
+
+.space-around {
+  justify-content: space-around;
+}

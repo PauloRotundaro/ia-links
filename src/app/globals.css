@@ -21,7 +21,7 @@ body {
 }
 
 .btn {
-  color:#FFF;
+  color: #FFF;
   font-weight: 500;
   border-radius: 5px;
   margin-left: 10px;
@@ -31,7 +31,7 @@ body {
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
-.btn:hover{
+.btn:hover {
   box-shadow: rgb(57, 104, 65) 0px 0px 2px 2px inset, rgba(255, 255, 255, 0.5) 0px 0px 3px 2px inset;
 }
 
@@ -50,6 +50,13 @@ body {
   display: flex;
   padding: 10px;
   overflow-wrap: anywhere;
+}
+
+.scrollbar{
+  overflow: scroll;
+  height: auto;
+  scrollbar-width: thin;
+  overflow-x: hidden;
 }
 
 .column-30:hover {

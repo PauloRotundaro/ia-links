@@ -50,6 +50,9 @@ body {
   display: flex;
   padding: 10px;
   overflow-wrap: anywhere;
+  max-height: 500px;
+  min-height: 100px;
+  flex-direction: column;
 }
 
 .scrollbar{

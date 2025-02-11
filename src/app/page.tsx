@@ -59,7 +59,7 @@ export default function Home() {
     setBotmakerContent(content?.botmakerContent?.messages);
   };
 
-  const highlightJSON = (json) => {
+  const highlightJSON = (json: string) => {
     const jsonString = JSON.stringify(json, null, 2);
 
     return jsonString.split("\n").map((line, index) => {
@@ -75,7 +75,7 @@ export default function Home() {
       let match;
       while ((match = regexRoleUser.exec(line)) !== null) {
         parts.push(line.substring(lastIndex, match.index));
-        parts.push(<span>"role": "<b key={`user-${index}`} className="text-blue-500">user</b>"</span>);
+        parts.push(<span key={`user-${index}`}>&quot;role&quot;: &quot;<b key={`user-${index}`} className="text-blue-500">user</b>&quot;</span>);
         lastIndex = regexRoleUser.lastIndex;
       }
 
@@ -83,23 +83,23 @@ export default function Home() {
         const nextLine = jsonString.split("\n")[index + 1];
         if (nextLine && nextLine.includes('"function_call":')) {
           parts.push(line.substring(lastIndex, match.index));
-          parts.push(<span>"role": "<b key={`assistant-fc-${index}`} className="text-red-500">assistant</b>"</span>);
+          parts.push(<span key={`assistant-fc-${index}`}>&quot;role&quot;: &quot;<b key={`assistant-fc-${index}`} className="text-red-500">assistant</b>&quot;</span>);
         } else {
           parts.push(line.substring(lastIndex, match.index));
-          parts.push(<span>"role": "<b key={`assistant-${index}`} className="text-green-500">assistant</b>"</span>);
+          parts.push(<span key={`assistant-${index}`}>&quot;role&quot;: &quot;<b key={`assistant-${index}`} className="text-green-500">assistant</b>&quot;</span>);
         }
         lastIndex = regexRoleAssistant.lastIndex;
       }
 
       while ((match = regexFunctionCall.exec(line)) !== null) {
         parts.push(line.substring(lastIndex, match.index));
-        parts.push(<span>"<b key={`function-call-${index}`} className="text-red-500">function_call</b>": </span>);
+        parts.push(<span key={`function-call-${index}`}>&quot;<b key={`function-call-${index}`} className="text-red-500">function_call</b>&quot;: </span>);
         lastIndex = regexFunctionCall.lastIndex;
       }
 
       while ((match = regexRoleFunction.exec(line)) !== null) {
         parts.push(line.substring(lastIndex, match.index));
-        parts.push(<span>"role": "<b key={`function-${index}`} className="text-purple-500">function</b>"</span>);
+        parts.push(<span key={`function-${index}`}>&quot;role&quot;: &quot;<b key={`function-${index}`} className="text-purple-500">function</b>&quot;</span>);
         lastIndex = regexRoleFunction.lastIndex;
       }
 

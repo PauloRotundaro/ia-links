@@ -8,6 +8,18 @@ export default function Home() {
     text: string;
   };
 
+  // type debounceMessage = {
+  //   role: string;
+  //   content: string | null;
+  //   name: string | null;
+  //   function_call: functionCall | null;
+  // }
+
+  // type functionCall = {
+  //   name: string | null;
+  //   arguments: string | null;
+  // }
+
   const [inputSessionId, setInputSessionId] = useState("");
   const [chatId, setChatId] = useState("");
   const [debounceContent, setDebounceContent] = useState("");
@@ -41,8 +53,9 @@ export default function Home() {
     setChatId(sessionId.split('_')[0]);
 
     const content = await contentResponse.json();
-    setDebounceContent(content?.debounceContent);
-    setLogContent(content?.logContent);
+
+    setDebounceContent(JSON.parse(content?.debounceContent));
+    setLogContent(JSON.parse(content?.logContent));
     setBotmakerContent(content?.botmakerContent?.messages);
   };
 
@@ -65,8 +78,16 @@ export default function Home() {
               <p className="wdt-100 mb-5">{message.from}: {message.text}</p>
             </div>
           ))}</div>
-          <div className="column-30 scrollbar" onClick={() => handleCopy(`https://debounce.ia.zoss.com.br/getObjects?id=${inputSessionId}`)}>{debounceContent}</div>
-          <div className="column-30 scrollbar" onClick={() => handleCopy(`https://ia-api-log.zoss.com.br/logs?projectId=movida-rac&identifier=${inputSessionId}`)}>{logContent}</div>
+          <div className="column-30 scrollbar" onClick={() => handleCopy(`https://debounce.ia.zoss.com.br/getObjects?id=${inputSessionId}`)}>
+            <pre className="whitespace-pre-wrap">
+              {JSON.stringify(debounceContent, null, 2)}
+            </pre>
+          </div>
+          <div className="column-30 scrollbar" onClick={() => handleCopy(`https://ia-api-log.zoss.com.br/logs?projectId=movida-rac&identifier=${inputSessionId}`)}>
+            <pre className="whitespace-pre-wrap">
+              {JSON.stringify(logContent, null, 2)}
+            </pre>
+          </div>
         </div>
       </main>
       {copied && <p className="mt-2 copied">Url copiada!</p>}

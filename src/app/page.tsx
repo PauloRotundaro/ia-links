@@ -59,6 +59,62 @@ export default function Home() {
     setBotmakerContent(content?.botmakerContent?.messages);
   };
 
+  const highlightJSON = (json) => {
+    const jsonString = JSON.stringify(json, null, 2);
+
+    return jsonString.split("\n").map((line, index) => {
+      const parts = [];
+      let lastIndex = 0;
+
+      const regexRoleUser = /("role":\s*)"user"/g;
+      const regexRoleAssistant = /("role":\s*)"assistant"/g;
+      const regexRoleFunction = /("role":\s*)"function"/g;
+      const regexFunctionCall = /("function_call":\s*)/g;
+      const regexBrackets = /<([^<>]+)>/g;
+
+      let match;
+      while ((match = regexRoleUser.exec(line)) !== null) {
+        parts.push(line.substring(lastIndex, match.index));
+        parts.push(<span>"role": "<b key={`user-${index}`} className="text-blue-500">user</b>"</span>);
+        lastIndex = regexRoleUser.lastIndex;
+      }
+
+      while ((match = regexRoleAssistant.exec(line)) !== null) {
+        const nextLine = jsonString.split("\n")[index + 1];
+        if (nextLine && nextLine.includes('"function_call":')) {
+          parts.push(line.substring(lastIndex, match.index));
+          parts.push(<span>"role": "<b key={`assistant-fc-${index}`} className="text-red-500">assistant</b>"</span>);
+        } else {
+          parts.push(line.substring(lastIndex, match.index));
+          parts.push(<span>"role": "<b key={`assistant-${index}`} className="text-green-500">assistant</b>"</span>);
+        }
+        lastIndex = regexRoleAssistant.lastIndex;
+      }
+
+      while ((match = regexFunctionCall.exec(line)) !== null) {
+        parts.push(line.substring(lastIndex, match.index));
+        parts.push(<span>"<b key={`function-call-${index}`} className="text-red-500">function_call</b>": </span>);
+        lastIndex = regexFunctionCall.lastIndex;
+      }
+
+      while ((match = regexRoleFunction.exec(line)) !== null) {
+        parts.push(line.substring(lastIndex, match.index));
+        parts.push(<span>"role": "<b key={`function-${index}`} className="text-purple-500">function</b>"</span>);
+        lastIndex = regexRoleFunction.lastIndex;
+      }
+
+      while ((match = regexBrackets.exec(line)) !== null) {
+        parts.push(line.substring(lastIndex, match.index));
+        parts.push(<strong key={`brackets-${index}`}>&lt;{match[1]}&gt;</strong>);
+        lastIndex = regexBrackets.lastIndex;
+      }
+
+      parts.push(line.substring(lastIndex));
+
+      return <div key={index}>{parts}</div>;
+    });
+  };
+
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <div className="flex">
@@ -80,12 +136,12 @@ export default function Home() {
           ))}</div>
           <div className="column-30 scrollbar" onClick={() => handleCopy(`https://debounce.ia.zoss.com.br/getObjects?id=${inputSessionId}`)}>
             <pre className="whitespace-pre-wrap">
-              {JSON.stringify(debounceContent, null, 2)}
+              {highlightJSON(debounceContent)}
             </pre>
           </div>
           <div className="column-30 scrollbar" onClick={() => handleCopy(`https://ia-api-log.zoss.com.br/logs?projectId=movida-rac&identifier=${inputSessionId}`)}>
             <pre className="whitespace-pre-wrap">
-              {JSON.stringify(logContent, null, 2)}
+              {highlightJSON(logContent)}
             </pre>
           </div>
         </div>

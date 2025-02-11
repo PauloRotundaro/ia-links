@@ -47,10 +47,11 @@ body {
   vertical-align: center;
   color: #000;
   font-weight: 400;
+  font-size: smaller;
   display: flex;
   padding: 10px;
   overflow-wrap: anywhere;
-  max-height: 500px;
+  max-height: 600px;
   min-height: 100px;
   flex-direction: column;
 }

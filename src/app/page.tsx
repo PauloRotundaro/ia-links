@@ -60,7 +60,7 @@ export default function Home() {
   };
 
   const highlightJSON = (json: string) => {
-    const jsonString = JSON.stringify(json, null, 2);
+    const jsonString = JSON.stringify(json, null, 2).replace(/\\{1,3}"/g, '"');
 
     return jsonString.split("\n").map((line, index) => {
       const parts = [];
@@ -129,8 +129,8 @@ export default function Home() {
           <p className="column-title">LOG</p>
         </div>
         <div className="columns flex gap-4 space-around">
-          <div className="column-30 scrollbar" onClick={() => handleCopy(`https://api.botmaker.com/v2.0/messages/?long-term-search=true&chat-id=${chatId}`)}>{botmakerContent.map(message => (
-            <div className="wdt-100" key={message.from + "_" + message.text}>
+          <div className="column-30 scrollbar" onClick={() => handleCopy(`https://api.botmaker.com/v2.0/messages/?long-term-search=true&chat-id=${chatId}`)}>{botmakerContent.map((message, index) => (
+            <div className="wdt-100" key={message.from + "_" + message.text + "_" + index}>
               <p className="wdt-100 mb-5">{message.from}: {message.text}</p>
             </div>
           ))}</div>

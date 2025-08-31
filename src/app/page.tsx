@@ -8,6 +8,13 @@ export default function Home() {
     text: string;
   };
 
+  type DataflowContent = {
+    sessionId: string;
+    content: string;
+    updatedAt: string;
+    createdAt: string;
+  }
+
   // type debounceMessage = {
   //   role: string;
   //   content: string | null;
@@ -25,6 +32,7 @@ export default function Home() {
   const [debounceContent, setDebounceContent] = useState("");
   const [logContent, setLogContent] = useState("");
   const [botmakerContent, setBotmakerContent] = useState<Message[]>([]);
+  const [dataflowContent, setDataflowContent] = useState<DataflowContent[]>([]);
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async (text: string) => {
@@ -40,7 +48,7 @@ export default function Home() {
   const fetchSessionId = async (sessionId: string) => {
     if (!inputSessionId) throw new Error("ID da sessão não informado.");
 
-    const contentResponse = await fetch(`https://api-ia.zoss.com.br/getContent?iaSessionId=${sessionId}`, {
+    const contentResponse = await fetch(`https://localhost:7173/getContent?iaSessionId=${sessionId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json"
@@ -57,6 +65,7 @@ export default function Home() {
     setDebounceContent(JSON.parse(content?.debounceContent));
     setLogContent(JSON.parse(content?.logContent));
     setBotmakerContent(content?.botmakerContent?.messages);
+    setDataflowContent(content?.dataflowContent);
   };
 
   const highlightJSON = (json: string) => {
@@ -127,6 +136,7 @@ export default function Home() {
           <p className="column-title">Botmaker Messages</p>
           <p className="column-title">IA Messages (debounce)</p>
           <p className="column-title">LOG</p>
+          <p className="column-title">Dataflow</p>
         </div>
         <div className="columns flex gap-4 space-around">
           <div className="column-30 scrollbar" onClick={() => handleCopy(`https://api.botmaker.com/v2.0/messages/?long-term-search=true&chat-id=${chatId}`)}>{botmakerContent.map((message, index) => (
@@ -144,6 +154,11 @@ export default function Home() {
               {highlightJSON(logContent)}
             </pre>
           </div>
+          <div className="column-30 scrollbar" onClick={() => handleCopy(`https://localhost:7180/getDataflow/${inputSessionId}`)}>{dataflowContent.map((dataflow, index) => (
+            <div className="wdt-100" key={dataflow.createdAt + "_" + index}>
+              <p className="wdt-100 mb-5">{dataflow.content}</p>
+            </div>
+          ))}</div>
         </div>
       </main>
       {copied && <p className="mt-2 copied">Url copiada!</p>}

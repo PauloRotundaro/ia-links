@@ -48,7 +48,7 @@ export default function Home() {
   const fetchSessionId = async (sessionId: string) => {
     if (!inputSessionId) throw new Error("ID da sessão não informado.");
 
-    const contentResponse = await fetch(`https://localhost:7173/getContent?iaSessionId=${sessionId}`, {
+    const contentResponse = await fetch(`https://api-ia.zoss.com.br/getContent?iaSessionId=${sessionId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json"

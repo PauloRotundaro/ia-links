@@ -154,7 +154,7 @@ export default function Home() {
               {highlightJSON(logContent)}
             </pre>
           </div>
-          <div className="column-30 scrollbar" onClick={() => handleCopy(`https://localhost:7180/getDataflow/${inputSessionId}`)}>{dataflowContent.map((dataflow, index) => (
+          <div className="column-30 scrollbar" onClick={() => handleCopy(`https://api.zx.zoss.ai/getDataflow/${inputSessionId}`)}>{dataflowContent.map((dataflow, index) => (
             <div className="wdt-100" key={dataflow.createdAt + "_" + index}>
               <p className="wdt-100 mb-5">{dataflow.content}</p>
             </div>

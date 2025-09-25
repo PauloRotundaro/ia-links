@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Home() {
   type Message = {
@@ -46,7 +46,7 @@ export default function Home() {
   };
 
   const fetchSessionId = async (sessionId: string) => {
-    if (!inputSessionId) throw new Error("ID da sessão não informado.");
+    if (!sessionId) throw new Error("ID da sessão não informado.");
 
     const contentResponse = await fetch(`https://api-ia.zoss.com.br/getContent?iaSessionId=${sessionId}`, {
       method: "GET",
@@ -67,6 +67,19 @@ export default function Home() {
     setBotmakerContent(content?.botmakerContent?.messages);
     setDataflowContent(content?.dataflowContent);
   };
+
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const sessionParam = params.get('session_id');
+      if (sessionParam) {
+        setInputSessionId(sessionParam);
+        fetchSessionId(sessionParam).catch(err => console.error('Erro ao buscar session via URL:', err));
+      }
+    } catch (err) {
+      console.error('Erro ao ler parâmetros da URL', err);
+    }
+  }, []);
 
   const highlightJSON = (json: string) => {
     const jsonString = JSON.stringify(json, null, 2).replace(/\\{1,3}"/g, '"');

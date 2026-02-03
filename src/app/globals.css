@@ -24,10 +24,9 @@ body {
   color: #FFF;
   font-weight: 500;
   border-radius: 5px;
-  margin-left: 10px;
+  margin-left: 20px;
   width: 100px;
   background-color: rgb(73, 190, 73);
-  border: 1px solid rgb(57, 104, 65);
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 

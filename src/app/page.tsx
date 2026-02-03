@@ -27,6 +27,7 @@ export default function Home() {
   //   arguments: string | null;
   // }
 
+  const [inputProjectId, setInputProjectId] = useState("");
   const [inputSessionId, setInputSessionId] = useState("");
   const [chatId, setChatId] = useState("");
   const [debounceContent, setDebounceContent] = useState("");
@@ -45,10 +46,15 @@ export default function Home() {
     }
   };
 
-  const fetchSessionId = async (sessionId: string) => {
+  const fetchSessionId = async (sessionId: string, projectId?: string) => {
     if (!sessionId) throw new Error("ID da sessão não informado.");
 
-    const contentResponse = await fetch(`https://api-ia.zoss.com.br/getContent?iaSessionId=${sessionId}`, {
+    let url = `https://api-ia.zoss.com.br/getContent?iaSessionId=${sessionId}`;
+    if (projectId && projectId.trim() !== "") {
+      url += `&projectId=${projectId}`;
+    }
+
+    const contentResponse = await fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json"
@@ -74,7 +80,7 @@ export default function Home() {
       const sessionParam = params.get('session_id');
       if (sessionParam) {
         setInputSessionId(sessionParam);
-        fetchSessionId(sessionParam).catch(err => console.error('Erro ao buscar session via URL:', err));
+        fetchSessionId(sessionParam, inputProjectId).catch(err => console.error('Erro ao buscar session via URL:', err));
       }
     } catch (err) {
       console.error('Erro ao ler parâmetros da URL', err);
@@ -140,9 +146,13 @@ export default function Home() {
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <div className="flex">
-        <div className="mr-3 input-title">Session ID:</div>
-        <input className="pl-1 pr-1 " placeholder="Digite o ID da sessão" value={inputSessionId} onChange={(e) => setInputSessionId(e.target.value)} />
-        <button className="btn" onClick={() => fetchSessionId(inputSessionId)}>Enviar</button>
+        <div className="mr-3 input-title">Project ID:</div>
+        <select className="pl-1 pr-1 cursor-pointer text-black bg-white border-2 border-gray-300 rounded-md w-48" value={inputProjectId} onChange={(e) => setInputProjectId(e.target.value)}>
+          <option value="movida-rac">Movida RAC</option>
+        </select>
+        <div className="mr-3 ml-3 input-title">Session ID:</div>
+        <input className="pl-1 pr-1 border-2 border-gray-300 rounded-md w-96" placeholder="Digite o ID da sessão" value={inputSessionId} onChange={(e) => setInputSessionId(e.target.value)} />
+        <button className="btn" onClick={() => fetchSessionId(inputSessionId, inputProjectId)}>Enviar</button>
       </div>
       <main className="wdt-100 flex flex-col gap-8">
         <div className="column-titles flex">
@@ -167,11 +177,25 @@ export default function Home() {
               {highlightJSON(logContent)}
             </pre>
           </div>
-          <div className="column-30 scrollbar" onClick={() => handleCopy(`https://api.zx.zoss.ai/getDataflow/${inputSessionId}`)}>{dataflowContent.map((dataflow, index) => (
-            <div className="wdt-100" key={dataflow.createdAt + "_" + index}>
-              <p className="wdt-100 mb-5">{dataflow.content}</p>
-            </div>
-          ))}</div>
+          <div className="column-30 scrollbar" onClick={() => handleCopy(`https://api.zx.zoss.ai/getDataflow/${inputSessionId}`)}>{dataflowContent.map((dataflow, index) => {
+            let contentToShow = dataflow.content;
+            if (typeof contentToShow === "string") {
+              try {
+                contentToShow = JSON.parse(contentToShow);
+              } catch {
+                // mantém como string se não for JSON válido
+              }
+            }
+            return (
+              <div className="wdt-100 mb-5" key={dataflow.createdAt + "_" + index}>
+                <pre className="whitespace-pre-wrap text-sm">
+                  {typeof contentToShow === "object" && contentToShow !== null
+                    ? highlightJSON(contentToShow)
+                    : String(contentToShow)}
+                </pre>
+              </div>
+            );
+          })}</div>
         </div>
       </main>
       {copied && <p className="mt-2 copied">Url copiada!</p>}

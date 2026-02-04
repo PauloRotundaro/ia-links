@@ -49,7 +49,7 @@ export default function Home() {
   const fetchSessionId = async (sessionId: string, projectId?: string) => {
     if (!sessionId) throw new Error("ID da sessão não informado.");
 
-    let url = `https://api-ia.zoss.com.br/getContent?iaSessionId=${sessionId}`;
+    let url = `https://hmg-zoss-api-ia.zoss.com.br/getContent?iaSessionId=${sessionId}`;
     if (projectId && projectId.trim() !== "") {
       url += `&projectId=${projectId}`;
     }
@@ -146,9 +146,20 @@ export default function Home() {
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <div className="flex">
-        <div className="mr-3 input-title">Project ID:</div>
+        <div className="mr-3 input-title">Projeto:</div>
         <select className="pl-1 pr-1 cursor-pointer text-black bg-white border-2 border-gray-300 rounded-md w-48" value={inputProjectId} onChange={(e) => setInputProjectId(e.target.value)}>
           <option value="movida-rac">Movida RAC</option>
+          <option value="amil-dental">Amil Dental</option>
+          <option value="assim-saude">Assim Saúde</option>
+          <option value="hapvida">Hapvida</option>
+          <option value="nissan">Nissan</option>
+          <option value="rod">ROD</option>
+          <option value="plano-pet">Plano Pet</option>
+          <option value="odontoprev">Odontoprev</option>
+          <option value="alugueldecarroai">Aluguel de Carro AI</option>
+          <option value="unidas-seminovos">Unidas Seminovos</option>
+          <option value="cpa">Carro Por Assinatura</option>
+          <option value="gwm">GWM</option>
         </select>
         <div className="mr-3 ml-3 input-title">Session ID:</div>
         <input className="pl-1 pr-1 border-2 border-gray-300 rounded-md w-96" placeholder="Digite o ID da sessão" value={inputSessionId} onChange={(e) => setInputSessionId(e.target.value)} />

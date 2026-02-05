@@ -78,9 +78,11 @@ export default function Home() {
     try {
       const params = new URLSearchParams(window.location.search);
       const sessionParam = params.get('session_id');
-      if (sessionParam) {
+      const projectParam = params.get('project_id');
+      if (sessionParam && projectParam) {
         setInputSessionId(sessionParam);
-        fetchSessionId(sessionParam, inputProjectId).catch(err => console.error('Erro ao buscar session via URL:', err));
+        setInputProjectId(projectParam);
+        fetchSessionId(sessionParam, projectParam).catch(err => console.error('Erro ao buscar session via URL:', err));
       }
     } catch (err) {
       console.error('Erro ao ler parâmetros da URL', err);
@@ -183,7 +185,7 @@ export default function Home() {
               {highlightJSON(debounceContent)}
             </pre>
           </div>
-          <div className="column-30 scrollbar" onClick={() => handleCopy(`https://ia-api-log.zoss.com.br/logs?projectId=movida-rac&identifier=${inputSessionId}`)}>
+          <div className="column-30 scrollbar" onClick={() => handleCopy(`https://ia-api-log.zoss.com.br/logs?projectId=${inputProjectId}&identifier=${inputSessionId}`)}>
             <pre className="whitespace-pre-wrap">
               {highlightJSON(logContent)}
             </pre>

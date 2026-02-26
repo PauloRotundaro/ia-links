@@ -152,6 +152,7 @@ export default function Home() {
         <select className="pl-1 pr-1 cursor-pointer text-black bg-white border-2 border-gray-300 rounded-md w-48" value={inputProjectId} onChange={(e) => setInputProjectId(e.target.value)}>
           <option value="movida-rac">Movida RAC</option>
           <option value="foco-rac">Foco RAC</option>
+          <option value="mit">Mitsubishi</option>
           <option value="amil-dental">Amil Dental</option>
           <option value="assim-saude">Assim Saúde</option>
           <option value="hapvida">Hapvida</option>

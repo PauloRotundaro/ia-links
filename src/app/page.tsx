@@ -154,6 +154,7 @@ export default function Home() {
           <option value="foco-rac">Foco RAC</option>
           <option value="mit">Mitsubishi</option>
           <option value="amil-dental">Amil Dental</option>
+          <option value="leve-dental">Leve Dental</option>
           <option value="assim-saude">Assim Saúde</option>
           <option value="hapvida">Hapvida</option>
           <option value="nissan">Nissan</option>

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 
 export default function Home() {
   type Message = {
@@ -142,89 +143,125 @@ export default function Home() {
   };
 
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <div className="flex">
-        <div className="mr-3 input-title">Projeto:</div>
-        <select className="pl-1 pr-1 cursor-pointer text-black bg-white border-2 border-gray-300 rounded-md w-48" value={inputProjectId} onChange={(e) => setInputProjectId(e.target.value)}>
-          <option value="movida-rac">Movida RAC</option>
-          <option value="foco-rac">Foco RAC</option>
-          <option value="mit">Mitsubishi</option>
-          <option value="amil-dental">Amil Dental</option>
-          <option value="leve-dental">Leve Dental</option>
-          <option value="assim-saude">Assim Saúde</option>
-          <option value="hapvida">Hapvida</option>
-          <option value="nissan">Nissan</option>
-          <option value="rod">ROD</option>
-          <option value="plano-pet">Plano Pet</option>
-          <option value="odontoprev">Odontoprev</option>
-          <option value="alugueldecarroai">Aluguel de Carro AI</option>
-          <option value="unidas-seminovos">Unidas Seminovos</option>
-          <option value="cpa">Carro Por Assinatura</option>
-          <option value="gwm">GWM</option>
-        </select>
-        <div className="mr-3 ml-3 input-title">Session ID:</div>
-        <input className="pl-1 pr-1 border-2 border-gray-300 rounded-md w-96" placeholder="Digite o ID da sessão" value={inputSessionId} onChange={(e) => setInputSessionId(e.target.value)} />
-        <button className="btn" onClick={() => fetchSessionId(inputSessionId, inputProjectId)}>Enviar</button>
-      </div>
-      <main className="wdt-100 flex flex-col gap-8">
-        <div className="column-titles flex">
-          <p className="column-title">Botmaker Messages</p>
-          <p className="column-title">IA Messages</p>
-          <p className="column-title">LOG</p>
-          <p className="column-title">Dataflow</p>
-        </div>
-        <div className="columns flex gap-4 space-around">
-          <div className="column-30 scrollbar" onClick={() => handleCopy(`https://api.botmaker.com/v2.0/messages/?long-term-search=true&chat-id=${chatId}`)}>{botmakerContent.map((message, index) => (
-            <div className="wdt-100" key={message.from + "_" + message.text + "_" + index}>
-              <p className="wdt-100 mb-5">{message.from}: {message.text}</p>
-            </div>
-          ))}</div>
-          <div className="column-30 scrollbar" onClick={() => handleCopy(`https://api.zx.zoss.ai/getObjects`)}>{debounceContent.map((item, index) => {
-            let contentToShow = item.content;
-            if (typeof contentToShow === "string") {
-              try {
-                contentToShow = JSON.parse(contentToShow);
-              } catch {
-                // mantém como string se não for JSON válido
-              }
-            }
-            return (
-              <div className="wdt-100 mb-5" key={item.id + "_" + index}>
-                <pre className="whitespace-pre-wrap text-sm">
-                  {typeof contentToShow === "object" && contentToShow !== null
-                    ? highlightJSON(contentToShow as unknown as string)
-                    : String(contentToShow)}
-                </pre>
-              </div>
-            );
-          })}</div>
-          <div className="column-30 scrollbar" onClick={() => handleCopy(`https://ia-api-log.zoss.com.br/logs?projectId=${inputProjectId}&identifier=${inputSessionId}`)}>
-            <pre className="whitespace-pre-wrap">
-              {highlightJSON(logContent)}
-            </pre>
+    <div className="app-shell">
+      <header className="app-header">
+        <div className="brand">
+          <Image className="brand-logo" src="/zoss-logo.png" alt="ZOSS" width={148} height={44} priority />
+          <div className="brand-text">
+            <span className="brand-title">Monitor IA</span>
+            <span className="brand-subtitle">Painel de monitoramento de sessões</span>
           </div>
-          <div className="column-30 scrollbar" onClick={() => handleCopy(`https://api.zx.zoss.ai/getDataflow/${inputSessionId}`)}>{dataflowContent.map((dataflow, index) => {
-            let contentToShow = dataflow.content;
-            if (typeof contentToShow === "string") {
-              try {
-                contentToShow = JSON.parse(contentToShow);
-              } catch {
-                // mantém como string se não for JSON válido
-              }
-            }
-            return (
-              <div className="wdt-100 mb-5" key={dataflow.createdAt + "_" + index}>
-                <pre className="whitespace-pre-wrap text-sm">
-                  {typeof contentToShow === "object" && contentToShow !== null
-                    ? highlightJSON(contentToShow)
-                    : String(contentToShow)}
-                </pre>
-              </div>
-            );
-          })}</div>
+        </div>
+        <span className="header-badge">Dica: clique numa coluna para copiar a URL da fonte</span>
+      </header>
+
+      <section className="control-panel">
+        <div className="field">
+          <label className="input-title">Projeto</label>
+          <select value={inputProjectId} onChange={(e) => setInputProjectId(e.target.value)}>
+            <option value="movida-rac">Movida RAC</option>
+            <option value="foco-rac">Foco RAC</option>
+            <option value="mit">Mitsubishi</option>
+            <option value="amil-dental">Amil Dental</option>
+            <option value="leve-dental">Leve Dental</option>
+            <option value="assim-saude">Assim Saúde</option>
+            <option value="hapvida">Hapvida</option>
+            <option value="nissan">Nissan</option>
+            <option value="rod">ROD</option>
+            <option value="plano-pet">Plano Pet</option>
+            <option value="odontoprev">Odontoprev</option>
+            <option value="alugueldecarroai">Aluguel de Carro AI</option>
+            <option value="unidas-seminovos">Unidas Seminovos</option>
+            <option value="cpa">Carro Por Assinatura</option>
+            <option value="gwm">GWM</option>
+          </select>
+        </div>
+        <div className="field field-grow">
+          <label className="input-title">Session ID</label>
+          <input placeholder="Digite o ID da sessão" value={inputSessionId} onChange={(e) => setInputSessionId(e.target.value)} />
+        </div>
+        <button className="btn" onClick={() => fetchSessionId(inputSessionId, inputProjectId)}>Buscar</button>
+      </section>
+
+      <main className="columns">
+        <div className="column-card">
+          <div className="column-head head-botmaker"><span className="dot" />Botmaker Messages</div>
+          <div className="column-body" onClick={() => handleCopy(`https://api.botmaker.com/v2.0/messages/?long-term-search=true&chat-id=${chatId}`)}>
+            {botmakerContent.length === 0
+              ? <span className="empty-hint">Sem mensagens.</span>
+              : botmakerContent.map((message, index) => (
+                <div className="bubble" key={message.from + "_" + message.text + "_" + index}>
+                  <span className="bubble-from">{message.from}:</span>{message.text}
+                </div>
+              ))}
+          </div>
+        </div>
+
+        <div className="column-card">
+          <div className="column-head head-ia"><span className="dot" />IA Messages</div>
+          <div className="column-body" onClick={() => handleCopy(`https://api.zx.zoss.ai/getObjects`)}>
+            {debounceContent.length === 0
+              ? <span className="empty-hint">Sem mensagens.</span>
+              : debounceContent.map((item, index) => {
+                let contentToShow = item.content;
+                if (typeof contentToShow === "string") {
+                  try {
+                    contentToShow = JSON.parse(contentToShow);
+                  } catch {
+                    // mantém como string se não for JSON válido
+                  }
+                }
+                return (
+                  <div className="entry" key={item.id + "_" + index}>
+                    <pre>
+                      {typeof contentToShow === "object" && contentToShow !== null
+                        ? highlightJSON(contentToShow as unknown as string)
+                        : String(contentToShow)}
+                    </pre>
+                  </div>
+                );
+              })}
+          </div>
+        </div>
+
+        <div className="column-card">
+          <div className="column-head head-log"><span className="dot" />LOG</div>
+          <div className="column-body" onClick={() => handleCopy(`https://ia-api-log.zoss.com.br/logs?projectId=${inputProjectId}&identifier=${inputSessionId}`)}>
+            {logContent
+              ? <pre>{highlightJSON(logContent)}</pre>
+              : <span className="empty-hint">Sem log.</span>}
+          </div>
+        </div>
+
+        <div className="column-card">
+          <div className="column-head head-dataflow"><span className="dot" />Dataflow</div>
+          <div className="column-body" onClick={() => handleCopy(`https://api.zx.zoss.ai/getDataflow/${inputSessionId}`)}>
+            {dataflowContent.length === 0
+              ? <span className="empty-hint">Sem dataflow.</span>
+              : dataflowContent.map((dataflow, index) => {
+                let contentToShow = dataflow.content;
+                if (typeof contentToShow === "string") {
+                  try {
+                    contentToShow = JSON.parse(contentToShow);
+                  } catch {
+                    // mantém como string se não for JSON válido
+                  }
+                }
+                return (
+                  <div className="entry" key={dataflow.createdAt + "_" + index}>
+                    <pre>
+                      {typeof contentToShow === "object" && contentToShow !== null
+                        ? highlightJSON(contentToShow)
+                        : String(contentToShow)}
+                    </pre>
+                  </div>
+                );
+              })}
+          </div>
         </div>
       </main>
-      {copied && <p className="mt-2 copied">Url copiada!</p>}
+
+      {copied && <p className="copied">URL copiada!</p>}
     </div>
   );
 }

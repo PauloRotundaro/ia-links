@@ -15,22 +15,16 @@ export default function Home() {
     createdAt: string;
   }
 
-  // type debounceMessage = {
-  //   role: string;
-  //   content: string | null;
-  //   name: string | null;
-  //   function_call: functionCall | null;
-  // }
-
-  // type functionCall = {
-  //   name: string | null;
-  //   arguments: string | null;
-  // }
+  type MessageContent = {
+    id: string;
+    timestamp: string;
+    content: unknown;
+  }
 
   const [inputProjectId, setInputProjectId] = useState("");
   const [inputSessionId, setInputSessionId] = useState("");
   const [chatId, setChatId] = useState("");
-  const [debounceContent, setDebounceContent] = useState("");
+  const [debounceContent, setDebounceContent] = useState<MessageContent[]>([]);
   const [logContent, setLogContent] = useState("");
   const [botmakerContent, setBotmakerContent] = useState<Message[]>([]);
   const [dataflowContent, setDataflowContent] = useState<DataflowContent[]>([]);
@@ -68,7 +62,9 @@ export default function Home() {
 
     const content = await contentResponse.json();
 
-    setDebounceContent(JSON.parse(content?.debounceContent));
+    const debounce = content?.debounceContent;
+    const parsedDebounce = typeof debounce === "string" ? JSON.parse(debounce) : debounce;
+    setDebounceContent(parsedDebounce?.items ?? []);
     setLogContent(JSON.parse(content?.logContent));
     setBotmakerContent(content?.botmakerContent?.messages);
     setDataflowContent(content?.dataflowContent);
@@ -173,7 +169,7 @@ export default function Home() {
       <main className="wdt-100 flex flex-col gap-8">
         <div className="column-titles flex">
           <p className="column-title">Botmaker Messages</p>
-          <p className="column-title">IA Messages (debounce)</p>
+          <p className="column-title">IA Messages</p>
           <p className="column-title">LOG</p>
           <p className="column-title">Dataflow</p>
         </div>
@@ -183,11 +179,25 @@ export default function Home() {
               <p className="wdt-100 mb-5">{message.from}: {message.text}</p>
             </div>
           ))}</div>
-          <div className="column-30 scrollbar" onClick={() => handleCopy(`https://debounce.ia.zoss.com.br/getObjects?id=${inputSessionId}`)}>
-            <pre className="whitespace-pre-wrap">
-              {highlightJSON(debounceContent)}
-            </pre>
-          </div>
+          <div className="column-30 scrollbar" onClick={() => handleCopy(`https://api.zx.zoss.ai/getObjects`)}>{debounceContent.map((item, index) => {
+            let contentToShow = item.content;
+            if (typeof contentToShow === "string") {
+              try {
+                contentToShow = JSON.parse(contentToShow);
+              } catch {
+                // mantém como string se não for JSON válido
+              }
+            }
+            return (
+              <div className="wdt-100 mb-5" key={item.id + "_" + index}>
+                <pre className="whitespace-pre-wrap text-sm">
+                  {typeof contentToShow === "object" && contentToShow !== null
+                    ? highlightJSON(contentToShow as unknown as string)
+                    : String(contentToShow)}
+                </pre>
+              </div>
+            );
+          })}</div>
           <div className="column-30 scrollbar" onClick={() => handleCopy(`https://ia-api-log.zoss.com.br/logs?projectId=${inputProjectId}&identifier=${inputSessionId}`)}>
             <pre className="whitespace-pre-wrap">
               {highlightJSON(logContent)}

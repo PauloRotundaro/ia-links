@@ -44,7 +44,7 @@ export default function Home() {
   const fetchSessionId = async (sessionId: string, projectId?: string) => {
     if (!sessionId) throw new Error("ID da sessão não informado.");
 
-    let url = `https://hmg-zoss-api-ia.zoss.com.br/getContent?iaSessionId=${sessionId}`;
+    let url = `https://api-ia.zoss.com.br/getContent?iaSessionId=${sessionId}`;
     if (projectId && projectId.trim() !== "") {
       url += `&projectId=${projectId}`;
     }

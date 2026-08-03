@@ -169,7 +169,8 @@ export default function Home() {
             <option value="nissan">Nissan</option>
             <option value="rod">ROD</option>
             <option value="plano-pet">Plano Pet</option>
-            <option value="odontoprev">Odontoprev</option>
+            <option value="odontoprev">Odontoprev Parceiro</option>
+            <option value="odontoprev-site">Odontoprev Site</option>
             <option value="alugueldecarroai">Aluguel de Carro AI</option>
             <option value="unidas-seminovos">Unidas Seminovos</option>
             <option value="cpa">Carro Por Assinatura</option>

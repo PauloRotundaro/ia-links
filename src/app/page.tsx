@@ -160,6 +160,7 @@ export default function Home() {
           <label className="input-title">Projeto</label>
           <select value={inputProjectId} onChange={(e) => setInputProjectId(e.target.value)}>
             <option value="movida-rac">Movida RAC</option>
+            <option value="movida-assinatura">Movida Assinatura</option>
             <option value="foco-rac">Foco RAC</option>
             <option value="mit">Mitsubishi</option>
             <option value="amil-dental">Amil Dental</option>
@@ -174,6 +175,7 @@ export default function Home() {
             <option value="alugueldecarroai">Aluguel de Carro AI</option>
             <option value="unidas-seminovos">Unidas Seminovos</option>
             <option value="unidas-rac">Unidas RAC</option>
+            <option value="unidas-livre">Unidas Livre</option>
             <option value="cpa">Carro Por Assinatura</option>
             <option value="gwm">GWM</option>
           </select>
